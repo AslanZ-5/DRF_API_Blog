@@ -1,0 +1,73 @@
+{% extends 'myblog/base.html' %}
+  {% block content%}
+{%block title%} {{post.title_tag}} Detail {% endblock %}
+
+<h1 class="">{{post.title}}</h1>
+<small> By: {{post.author}} {{post.author.email}}</small>
+<br>
+{%if post.header_image %}
+ <img src="{{post.header_image.url}}" alt="post image">
+{% endif %}
+{{ post.body|safe }}
+{% if user.is_authenticated%}
+{% if user.id == post.author.id %}
+<a href="{% url 'delete_post' post.pk %}">delete</a><br>
+<a href="{% url 'update_post' post.pk %}">update</a><br><br>
+{% endif %}
+{% endif %}
+<a href="{% url 'home' %}" class="btn btn-secondary"> Go home</a>
+<br><br><br>
+{% if user.is_authenticated%}
+<form action="{% url 'like_post' post.pk %}" method="POST">
+  {% csrf_token %}
+  {% if liked %}
+  <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-danger">{{total_likes}}Unlike</button>
+  {% else %}
+  <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-primary">{{total_likes}}like</button>
+  {% endif %}
+</form>
+{% endif%}
+
+
+
+
+<div class="card mb-3" >
+  <div class="row g-2">
+    <div class="col-md-10">
+      <img src="{{post.author.profile.image.url}}" class="img-fluid rounded-start" width="300" height="300" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+                <a href="{% url 'profile' post.author.profile.id%} ">Author Profile</a>
+
+        <h5 class="card-title">({{post.author.username}})   {{post.author.first_name}}
+
+                                      {{post.author.last_name}}</h5>
+
+        <a href="{{post.author.profile.fb_url}}">FACEBOOK</a>
+        <a href="{{post.author.profile.tw_url}}">TWITTER</a>
+        <a href="{{post.author.profile.inst_url}}">INSTAGRAM</a>
+        <p class="card-text">{{post.author.profile.biograph}}</p>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<br><br>
+<h2>Comments....</h2>
+<br>
+{% if not post.comments.all %}
+No coments yet..
+<a href="{% url 'add_comment' post.pk%}"> <button  class="btn btn-primary">add comment</button> </a>
+{% else %}
+<a href="{% url 'add_comment' post.pk%}"> <button  class="btn btn-primary">add comment</button> </a>
+{% for comment in post.comments.all %}
+<br><br> {{comment.name}}<br>
+{{comment.date_added}}<br>
+{{comment.body}}<br>
+{% endfor %}
+{% endif %}
+<br><br><br>
+{% endblock %}

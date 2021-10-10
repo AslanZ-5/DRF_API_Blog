@@ -1,0 +1,28 @@
+{% extends 'myblog/base.html' %}
+{% block content %}
+
+<h1>User Profile</h1>
+<div class="card mb-3" >
+  <div class="row g-2">
+    <div class="col-md-10">
+      <img src="{{page_user.image.url}}" class="img-fluid rounded-start" width="300" height="300" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+
+
+        <h5 class="card-title">({{page_user.user.username}})   {{page_user.user.first_name}}
+
+                                      {{page_user.user.last_name}}</h5>
+
+        <a href="{{page_user.profile.fb_url}}">FACEBOOK</a>
+        <a href="{{page_user.profile.tw_url}}">TWITTER</a>
+        <a href="{{page_user.profile.inst_url}}">INSTAGRAM</a>
+        <p class="card-text">{{page_user.biograph}}</p>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'myblog/base.html' %}
+  {% block content%}
+{%block title%}  New Post {% endblock %}
+
+<h1>Create Post</h1>
+<div class="form-group" >
+<form  method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{form.media}}
+  {{form.as_p}}
+  <button class="btn btn-secondary" >Add
+  </button>
+
+</form>
+</div>
+{% endblock %}
