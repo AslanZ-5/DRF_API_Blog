@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, HyperlinkedIdentityField
 from myblog.models import Post
 
 
@@ -18,10 +18,12 @@ class PostCreateSerializer(ModelSerializer):
 
 
 class PostListSerializer(ModelSerializer):
+    track_listing = HyperlinkedIdentityField(view_name='api:api_detail')
     class Meta:
+
         model = Post
         fields = [
-            'id',
+            'track_listing',
             'author',
             'title',
             'title_tag',

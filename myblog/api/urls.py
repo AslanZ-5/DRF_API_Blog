@@ -6,13 +6,13 @@ from myblog.api.views import ( PostListAPIView,
                                PostCreateApiview
 
     )
-
+app_name = 'api'
 urlpatterns = [
     path('', PostListAPIView.as_view(), name='api_list'),
     path('add/', PostCreateApiview.as_view()),
-    path('<post_id>/',PostDetailApiview.as_view(),name='api_detail'),
-    path('<post_id>/delete',PostDeleteAPIView.as_view(),name='api_delete'),
-    path('<post_id>/edit',PostUpdateApiview.as_view(),name='api_update'),
+    path('<int:pk>/',PostDetailApiview.as_view(),name='api_detail'),
+    path('<int:pk>/delete',PostDeleteAPIView.as_view(),name='api_delete'),
+    path('<int:pk>/edit',PostUpdateApiview.as_view(),name='api_update'),
 
 
 ]
