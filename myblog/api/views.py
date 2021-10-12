@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework.generics import (ListAPIView,
                                      RetrieveAPIView,
                                      UpdateAPIView,
@@ -12,13 +13,14 @@ from .serializers import (PostListSerializer,
 from .permissions import IsOwner
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
+
 class PostCreateApiview(CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostCreateSerializer
     permission_classes = [IsAuthenticated]
+
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
-
 
 
 class PostDetailApiview(RetrieveAPIView):
@@ -39,12 +41,23 @@ class PostUpdateApiview(UpdateAPIView):
     serializer_class = PostDetailSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'post_id'
-    permission_classes = [IsAuthenticatedOrReadOnly,IsOwner]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwner]
 
     def perform_update(self, serializer):
         serializer.save(author=self.request.user)
 
 
 class PostListAPIView(ListAPIView):
-    queryset = Post.objects.all().order_by('-id')
     serializer_class = PostListSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        queryset_list = Post.objects.all().order_by('-id')
+        query = self.request.GET.get('q')
+        if query:
+            queryset_list = queryset_list.filter(
+                Q(title__icontains=query) |
+                Q(body__icontains=query) |
+                Q(author__first_name__icontains=query) |
+                Q(author__last_name__icontains=query)
+            ).distinct()
+        return queryset_list
