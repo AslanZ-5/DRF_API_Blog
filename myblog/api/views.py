@@ -12,7 +12,10 @@ from .serializers import (PostListSerializer,
                           )
 from .permissions import IsOwner
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-
+from rest_framework.filters import (
+        SearchFilter,
+        OrderingFilter
+)
 
 class PostCreateApiview(CreateAPIView):
     queryset = Post.objects.all()
@@ -49,7 +52,8 @@ class PostUpdateApiview(UpdateAPIView):
 
 class PostListAPIView(ListAPIView):
     serializer_class = PostListSerializer
-
+    filter_backends = [SearchFilter,OrderingFilter]
+    search_fields = ['title','body','author__first_name','author__last_name','author__username']
     def get_queryset(self, *args, **kwargs):
         queryset_list = Post.objects.all().order_by('-id')
         query = self.request.GET.get('q')
