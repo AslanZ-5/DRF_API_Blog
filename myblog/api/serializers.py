@@ -18,12 +18,16 @@ class PostCreateSerializer(ModelSerializer):
 
 
 class PostListSerializer(ModelSerializer):
-    track_listing = HyperlinkedIdentityField(view_name='api:api_detail')
+    url = HyperlinkedIdentityField(view_name='api:api_detail')
+    delete_url = HyperlinkedIdentityField(view_name='api:api_delete')
+    update_url = HyperlinkedIdentityField(view_name='api:api_update')
     class Meta:
 
         model = Post
         fields = [
-            'track_listing',
+            'url',
+            'delete_url',
+            'update_url',
             'author',
             'title',
             'title_tag',

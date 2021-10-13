@@ -36,21 +36,21 @@ class PostCreateApiview(CreateAPIView):
 class PostDetailApiview(RetrieveAPIView):
     queryset = Post.objects.all()
     serializer_class = PostDetailSerializer
-    lookup_field = 'id'
-    lookup_url_kwarg = 'post_id'
+    lookup_field = 'pk'
+
 
 
 class PostDeleteAPIView(DestroyAPIView):
     queryset = Post.objects.all()
-    lookup_field = 'id'
-    lookup_url_kwarg = 'post_id'
+    lookup_field = 'pk'
+
 
 
 class PostUpdateApiview(UpdateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostDetailSerializer
-    lookup_field = 'id'
-    lookup_url_kwarg = 'post_id'
+    lookup_field = 'pk'
+
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwner]
 
     def perform_update(self, serializer):
