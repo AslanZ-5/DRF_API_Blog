@@ -1,9 +1,9 @@
 from rest_framework.serializers import (ModelSerializer,
                                         HyperlinkedIdentityField,
                                         SerializerMethodField,
-                                        )
+                                    )
 from myblog.models import Post
-
+from myblog.models import Comment
 
 class PostCreateSerializer(ModelSerializer):
     class Meta:
@@ -93,3 +93,17 @@ if new_item.is_valid():
 else:
     print(new_item.errors)
 """
+
+
+
+### COMMENT MODEL
+class CommentSerializer(ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = [
+            'id',
+            'post',
+            'name',
+            'body',
+            'date_added'
+        ]

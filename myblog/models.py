@@ -57,4 +57,10 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.post.title}, {self.name}"
+#a.likes.remove(User.objects.get(id=1))
 
+
+# >>> for i in range(len(users)):
+# ...     a = Post.objects.all()[i]
+# ...     a.likes.add(users[i])
+# ...     a.save()

@@ -6,9 +6,11 @@ from rest_framework.generics import (ListAPIView,
                                      CreateAPIView,
                                      )
 from myblog.models import Post
+from myblog.models import Comment
 from .serializers import (PostListSerializer,
                           PostDetailSerializer,
                           PostCreateSerializer,
+                          CommentSerializer,
                           )
 from .permissions import IsOwner
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -64,6 +66,29 @@ class PostListAPIView(ListAPIView):
     pagination_class = PaginationNumber
     def get_queryset(self, *args, **kwargs):
         queryset_list = Post.objects.all().order_by('-id')
+        query = self.request.GET.get('q')
+        if query:
+            queryset_list = queryset_list.filter(
+                Q(title__icontains=query) |
+                Q(body__icontains=query) |
+                Q(author__first_name__icontains=query) |
+                Q(author__last_name__icontains=query)
+            ).distinct()
+        return queryset_list
+
+
+class PostCommentDetailAPIView(RetrieveAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+
+class CommentListAPIView(ListAPIView):
+    serializer_class = CommentSerializer
+    filter_backends = [SearchFilter,OrderingFilter]
+    search_fields = ['name','body']
+    pagination_class = PaginationNumber
+    def get_queryset(self, *args, **kwargs):
+        queryset_list = Comment.objects.all().order_by('-id')
         query = self.request.GET.get('q')
         if query:
             queryset_list = queryset_list.filter(
