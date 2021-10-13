@@ -1,4 +1,7 @@
-from rest_framework.serializers import ModelSerializer, HyperlinkedIdentityField
+from rest_framework.serializers import (ModelSerializer,
+                                        HyperlinkedIdentityField,
+                                        SerializerMethodField,
+                                        )
 from myblog.models import Post
 
 
@@ -18,17 +21,19 @@ class PostCreateSerializer(ModelSerializer):
 
 
 class PostListSerializer(ModelSerializer):
-    url = HyperlinkedIdentityField(view_name='api:api_detail')
+    detail = HyperlinkedIdentityField(view_name='api:api_detail')
     delete_url = HyperlinkedIdentityField(view_name='api:api_delete')
     update_url = HyperlinkedIdentityField(view_name='api:api_update')
-    class Meta:
+    user = SerializerMethodField()
 
+
+    class Meta:
         model = Post
         fields = [
-            'url',
+            'detail',
             'delete_url',
             'update_url',
-            'author',
+            'user',
             'title',
             'title_tag',
             'body',
@@ -36,13 +41,24 @@ class PostListSerializer(ModelSerializer):
             'category',
 
         ]
+
+    def get_user(self, obj):
+        return str(obj.author.username)
+
+
 
 
 class PostDetailSerializer(ModelSerializer):
+    user = SerializerMethodField()
+    delete_url = HyperlinkedIdentityField(view_name='api:api_delete')
+    update_url = HyperlinkedIdentityField(view_name='api:api_update')
+
     class Meta:
         model = Post
         fields = [
-
+            'delete_url',
+            'update_url',
+            'user',
             'title',
             'title_tag',
             'body',
@@ -50,6 +66,9 @@ class PostDetailSerializer(ModelSerializer):
             'category',
 
         ]
+
+    def get_user(self, obj):
+        return str(obj.author.username)
 
 
 """
