@@ -25,7 +25,7 @@ class PostListSerializer(ModelSerializer):
     delete_url = HyperlinkedIdentityField(view_name='api:api_delete')
     update_url = HyperlinkedIdentityField(view_name='api:api_update')
     user = SerializerMethodField()
-
+    image = SerializerMethodField()
 
     class Meta:
         model = Post
@@ -39,13 +39,19 @@ class PostListSerializer(ModelSerializer):
             'body',
             'post_date',
             'category',
+            'image'
 
         ]
 
     def get_user(self, obj):
         return str(obj.author.username)
 
-
+    def get_image(self, obj):
+        try:
+            image = obj.header_image.url
+        except:
+            image = None
+        return image
 
 
 class PostDetailSerializer(ModelSerializer):
