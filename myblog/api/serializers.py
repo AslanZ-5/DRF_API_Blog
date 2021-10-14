@@ -52,7 +52,9 @@ class PostListSerializer(ModelSerializer):
         except:
             image = None
         return image
-
+    def get_contents(self,obj):
+        content_type = obj.get_content_type
+        object_id = obj.id
 
 class PostDetailSerializer(ModelSerializer):
     user = SerializerMethodField()
@@ -107,3 +109,5 @@ class CommentSerializer(ModelSerializer):
             'body',
             'date_added'
         ]
+
+
