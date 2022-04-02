@@ -1,13 +1,15 @@
-FROM python:3.8-alpine
+FROM python:3.8-slim-buster
 ENV PATH="/scripts:${PATH}"
 
 COPY ./requirements.txt /requirements.txt
+RUN apk update
+RUN apk add postgresql-dev gcc python3-dev musl-dev
 RUN apk add --update --no-cache --virtual .tmp gcc libc-dev linux-headers
-RUN pip install ir /requirements.txt
+RUN python -m pip install -r requirements.txt
 RUN apk del .tmp
 
 RUN mkdir /app_blog
-COPY ./DRF_API_Blog /app_blog
+COPY . /app_blog
 WORKDIR /appw
 COPY ./scripts /scripts
 
