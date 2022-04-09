@@ -78,10 +78,12 @@ WSGI_APPLICATION = 'updated_bl.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'mysql',
+        'NAME': 'root',
         "USER": 'root',
+        "HOST": "mysqldb",
         "PORT": '3307',
-        "PASSWORD":'p@ssw0rd1'
+        "PASSWORD":'root'
+        
     }
 }
 
