@@ -5,6 +5,7 @@ from ckeditor.fields import RichTextField
 
 
 class Category(models.Model):
+    
     name = models.CharField(max_length=250)
 
     def __str__(self):

@@ -1,10 +1,14 @@
 from django import forms
 from .models import Post, Category,Comment
-
-category = Category.objects.all().values_list('name', 'name')
 choice_list = []
-for item in category:
-    choice_list.append(item)
+if Category.objects.all():
+    category = Category.objects.all().values_list('name', 'name')
+
+    
+    for item in category:
+        choice_list.append(item)
+else:
+    choice_list.append('all Categor')
 
 
 class PostForm(forms.ModelForm):
